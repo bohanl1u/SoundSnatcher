@@ -85,6 +85,15 @@ async function initDemo() {
     const frame = document.getElementById('demo-iframe');
     if (frame) frame.src = demoOrigin;
     if (section) section.hidden = false;
+    return;
+  }
+
+  // An address is published but this browser couldn't reach it. Say so instead
+  // of hiding silently — a blocked visitor would otherwise never learn a demo
+  // existed, and would have no idea why.
+  if (demoOrigin) {
+    const note = document.getElementById('demo-unreachable');
+    if (note) note.hidden = false;
   }
 }
 
