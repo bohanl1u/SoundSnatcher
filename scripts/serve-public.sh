@@ -23,6 +23,38 @@ LOG="$(mktemp -t soundsnatcher-tunnel)"
 
 SERVER_PID=""
 TUNNEL_PID=""
+# Tracks whether this run ever announced itself. Without it, a run that dies
+# early would publish "offline" and take a *healthy* instance's demo down with
+# it — which is exactly what happened when a second run hit a busy port.
+PUBLISHED=0
+
+# ----------------------------------------------------------------- preflight
+# Everything that can fail before the cleanup trap is armed, so a doomed run
+# cannot touch the published state.
+
+command -v cloudflared >/dev/null || {
+  echo "cloudflared not found. Install it with:  brew install cloudflared"
+  exit 1
+}
+
+[ -f "$APP_DIR/server.js" ] || {
+  echo "Cannot find the tool at: $APP_DIR"
+  echo "Clone it next to this repo, or set APP_DIR:"
+  echo "  git clone https://github.com/bohanl1u/soundsnatcher-app.git"
+  exit 1
+}
+
+if lsof -ti "tcp:$PORT" >/dev/null 2>&1; then
+  echo "Port $PORT is already in use — the demo may already be running."
+  echo
+  echo "  Check:  curl -s localhost:$PORT/api/health"
+  echo "  Stop:   kill \$(lsof -ti tcp:$PORT)"
+  echo
+  echo "Doing nothing, so the running instance keeps serving."
+  exit 1
+fi
+
+# ------------------------------------------------------------------- publish
 
 publish() {
   printf '{\n  "origin": "%s"\n}\n' "$1" > "$CONFIG"
@@ -39,20 +71,16 @@ cleanup() {
   echo "Shutting down..."
   [ -n "$TUNNEL_PID" ] && kill "$TUNNEL_PID" 2>/dev/null || true
   [ -n "$SERVER_PID" ] && kill "$SERVER_PID" 2>/dev/null || true
-  echo "  marking the demo offline"
-  publish "" "Demo offline"
+  if [ "$PUBLISHED" = "1" ]; then
+    echo "  marking the demo offline"
+    publish "" "Demo offline"
+  fi
   rm -f "$LOG"
   echo "Done."
 }
 trap cleanup EXIT INT TERM
 
-command -v cloudflared >/dev/null || { echo "cloudflared not found. brew install cloudflared"; exit 1; }
-[ -f "$APP_DIR/server.js" ] || {
-  echo "Cannot find the tool at: $APP_DIR"
-  echo "Clone it next to this repo, or set APP_DIR:"
-  echo "  git clone https://github.com/bohanl1u/soundsnatcher-app.git"
-  exit 1
-}
+# -------------------------------------------------------------------- serve
 
 # Bound to loopback deliberately. The tunnel is the only way in, which is what
 # makes TRUST_PROXY safe — otherwise anyone on the LAN could send a forged
@@ -82,6 +110,7 @@ done
 echo
 echo "  Demo URL: $URL"
 publish "$URL" "Demo online"
+PUBLISHED=1
 echo
 echo "  Landing page: https://bohanl1u.github.io/SoundSnatcher/"
 echo "  Limits: 3 snatches/min per IP, 2 concurrent, 20 min max per video"
