@@ -58,42 +58,31 @@ async function isUp(origin) {
   }
 }
 
+/**
+ * Two independent checks, two independent sections. Each appears only if its own
+ * target answers, and neither suppresses the other — so a visitor running their
+ * own copy still sees the live demo, with their local install offered directly
+ * beneath it. When nothing answers, nothing renders.
+ */
 async function initDemo() {
-  // ?remote skips local detection. Whoever hosts the demo is by definition also
-  // running it locally, so without this they can only ever see the "local
-  // install detected" panel and never what an actual visitor gets.
-  const forceRemote = new URLSearchParams(location.search).has('remote');
-
   const demoOrigin = await loadDemoOrigin();
   const [remoteUp, localUp] = await Promise.all([
     isUp(demoOrigin),
-    forceRemote ? Promise.resolve(false) : isUp(LOCAL_ORIGIN),
+    isUp(LOCAL_ORIGIN),
   ]);
-
-  // A local install always beats the shared demo: it's theirs, and it has no
-  // rate limits.
-  if (localUp) {
-    const section = document.getElementById('local');
-    const link = document.getElementById('local-link');
-    if (link) link.href = LOCAL_ORIGIN;
-    if (section) section.hidden = false;
-    return;
-  }
 
   if (remoteUp) {
     const section = document.getElementById('demo');
     const frame = document.getElementById('demo-iframe');
     if (frame) frame.src = demoOrigin;
     if (section) section.hidden = false;
-    return;
   }
 
-  // An address is published but this browser couldn't reach it. Say so instead
-  // of hiding silently — a blocked visitor would otherwise never learn a demo
-  // existed, and would have no idea why.
-  if (demoOrigin) {
-    const note = document.getElementById('demo-unreachable');
-    if (note) note.hidden = false;
+  if (localUp) {
+    const section = document.getElementById('local');
+    const link = document.getElementById('local-link');
+    if (link) link.href = LOCAL_ORIGIN;
+    if (section) section.hidden = false;
   }
 }
 

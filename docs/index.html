@@ -109,21 +109,8 @@
     </div>
   </section>
 
-  <!-- Shown when a demo address is published but the browser can't reach it:
-       the host may be offline, or an extension or network filter may be
-       blocking it. Better than hiding silently and leaving no explanation. -->
-  <section id="demo-unreachable" class="local-detected" hidden>
-    <div class="local-inner">
-      <p>
-        <strong>The live demo isn't reachable from this browser.</strong><br />
-        It may be offline right now, or blocked by an extension or network filter.
-        Running it yourself takes about a minute and has no limits.
-      </p>
-      <a class="btn btn-primary" href="#install">Install it instead</a>
-    </div>
-  </section>
-
-  <!-- Shown when a local install is detected on this machine. -->
+  <!-- Shown when a copy is running on the visitor's own machine. Independent of
+       the demo above: both can appear at once. -->
   <section id="local" class="local-detected" hidden>
     <div class="local-inner">
       <span class="status-dot"><i></i> Local install detected</span>
