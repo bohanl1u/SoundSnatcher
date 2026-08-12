@@ -59,10 +59,15 @@ async function isUp(origin) {
 }
 
 async function initDemo() {
+  // ?remote skips local detection. Whoever hosts the demo is by definition also
+  // running it locally, so without this they can only ever see the "local
+  // install detected" panel and never what an actual visitor gets.
+  const forceRemote = new URLSearchParams(location.search).has('remote');
+
   const demoOrigin = await loadDemoOrigin();
   const [remoteUp, localUp] = await Promise.all([
     isUp(demoOrigin),
-    isUp(LOCAL_ORIGIN),
+    forceRemote ? Promise.resolve(false) : isUp(LOCAL_ORIGIN),
   ]);
 
   // A local install always beats the shared demo: it's theirs, and it has no
