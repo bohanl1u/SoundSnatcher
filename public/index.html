@@ -8,83 +8,102 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎧</text></svg>" />
 </head>
 <body>
+  <!-- Blurred artwork wash behind everything, Apple Music style. -->
+  <div class="ambient" id="ambient" aria-hidden="true"></div>
+
   <main class="shell">
     <header class="masthead">
-      <h1>Sound<span>Snatcher</span></h1>
-      <p class="tagline">Paste a link. Snatch the audio.</p>
+      <div class="wordmark">
+        <span class="mark" aria-hidden="true">
+          <i></i><i></i><i></i><i></i>
+        </span>
+        <h1>Sound<span>Snatcher</span></h1>
+      </div>
+      <p class="tagline">Paste a link. Download the audio.</p>
     </header>
 
-    <!-- Idle: the whole tool is this one row. -->
-    <section id="panel-idle" class="panel">
-      <form id="snatch-form" autocomplete="off">
-        <div class="url-row">
-          <input
-            id="url"
-            type="url"
-            name="url"
-            placeholder="https://www.youtube.com/watch?v=…"
-            spellcheck="false"
-            required
-          />
-          <button type="submit" class="btn btn-primary">Snatch</button>
-        </div>
+    <div class="stage-wrap">
+      <!-- Idle -->
+      <section id="panel-idle" class="panel">
+        <form id="snatch-form" autocomplete="off">
+          <div class="url-row">
+            <input
+              id="url"
+              type="url"
+              name="url"
+              placeholder="https://www.youtube.com/watch?v=…"
+              spellcheck="false"
+              required
+            />
+            <button type="submit" class="btn btn-primary">Snatch</button>
+          </div>
 
-        <label class="checkbox" for="analyze">
-          <input type="checkbox" id="analyze" />
-          <span class="box" aria-hidden="true"></span>
-          <span class="checkbox-text">
-            Analyze key &amp; BPM
-            <em>Writes them into the download filename</em>
+          <label class="checkbox" for="analyze">
+            <input type="checkbox" id="analyze" />
+            <span class="box" aria-hidden="true"></span>
+            <span class="checkbox-text">
+              Analyze key &amp; BPM
+              <em>Writes them into the download filename</em>
+            </span>
+          </label>
+
+          <p id="idle-error" class="error" hidden></p>
+        </form>
+      </section>
+
+      <!-- Working -->
+      <section id="panel-working" class="panel" hidden>
+        <div class="working-head">
+          <span class="eq" id="eq" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i>
           </span>
-        </label>
-
-        <p id="idle-error" class="error" hidden></p>
-      </form>
-    </section>
-
-    <!-- Working -->
-    <section id="panel-working" class="panel" hidden>
-      <p class="stage" id="stage-text">Snatching…</p>
-      <div class="progress"><div class="progress-bar" id="progress-bar"></div></div>
-      <p class="stage-hint" id="stage-hint">Pulling the audio stream</p>
-    </section>
-
-    <!-- Ready -->
-    <section id="panel-ready" class="panel" hidden>
-      <div class="track">
-        <img id="thumb" class="thumb" alt="" hidden />
-        <div class="track-meta">
-          <h2 id="track-title">—</h2>
-          <p id="track-sub" class="track-sub"></p>
-          <div id="badges" class="badges"></div>
+          <div class="working-copy">
+            <p class="stage" id="stage-text">Snatching</p>
+            <p class="stage-hint" id="stage-hint">Finding the audio stream</p>
+          </div>
+          <span class="percent" id="percent">0%</span>
         </div>
-      </div>
+        <div class="progress"><div class="progress-bar" id="progress-bar"></div></div>
+      </section>
 
-      <div class="formats">
-        <p class="formats-label">Format</p>
-        <div class="chips" id="chips" role="radiogroup" aria-label="Download format"></div>
-      </div>
+      <!-- Ready -->
+      <section id="panel-ready" class="panel" hidden>
+        <div class="track">
+          <div class="art-wrap">
+            <img id="thumb" class="thumb" alt="" hidden />
+          </div>
+          <div class="track-meta">
+            <h2 id="track-title">—</h2>
+            <p id="track-sub" class="track-sub"></p>
+            <div id="badges" class="badges"></div>
+          </div>
+        </div>
 
-      <p id="filename-preview" class="filename-preview"></p>
+        <div class="formats">
+          <p class="section-label">Format</p>
+          <div class="chips" id="chips" role="radiogroup" aria-label="Download format"></div>
+        </div>
 
-      <div class="actions">
-        <button id="download" class="btn btn-primary">Download</button>
-        <button id="another" class="btn btn-ghost">Another One</button>
-      </div>
-    </section>
+        <p class="section-label">Saves as</p>
+        <p id="filename-preview" class="filename-preview"></p>
 
-    <!-- Error -->
-    <section id="panel-error" class="panel" hidden>
-      <p class="error-title">Couldn't snatch that one.</p>
-      <p id="error-detail" class="error-detail"></p>
-      <div class="actions">
-        <button id="another-error" class="btn btn-ghost">Another One</button>
-      </div>
-    </section>
+        <div class="actions">
+          <button id="download" class="btn btn-primary btn-lg">Download</button>
+          <button id="another" class="btn btn-ghost btn-lg">Another One</button>
+        </div>
+      </section>
 
-    <footer class="foot">
-      Local tool — only rip audio you have the rights to use.
-    </footer>
+      <!-- Error -->
+      <section id="panel-error" class="panel" hidden>
+        <p class="error-title">Couldn't snatch that one</p>
+        <p id="error-detail" class="error-detail"></p>
+        <div class="actions">
+          <button id="another-error" class="btn btn-ghost btn-lg">Another One</button>
+        </div>
+      </section>
+    </div>
+
+    <footer class="foot">SoundSnatcher will always be free</footer>
   </main>
 
   <script src="/app.js" type="module"></script>
