@@ -5,7 +5,7 @@
 > DJs and music producers who organise libraries by tempo and key.
 
 Homepage: https://bohanl1u.github.io/SoundSnatcher/
-Source: https://github.com/bohanl1u/SoundSnatcher
+Source: https://github.com/bohanl1u/soundsnatcher-app
 Licence: MIT
 Cost: free, no paid tier, no account
 
@@ -29,8 +29,8 @@ Requires Node 20 or newer, plus `yt-dlp` and `ffmpeg` on the PATH.
 
 ```
 brew install node yt-dlp ffmpeg
-git clone https://github.com/bohanl1u/SoundSnatcher.git
-cd SoundSnatcher
+git clone https://github.com/bohanl1u/soundsnatcher-app.git
+cd soundsnatcher-app
 npm install
 npm start
 ```

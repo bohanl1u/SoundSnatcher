@@ -7,11 +7,24 @@
 
 // ---------------------------------------------------------------- config
 
-/* Public hostname of the live instance, e.g. a Tailscale Funnel or Cloudflare
- * Tunnel address. Must be https:// — this page is served over TLS, so a plain
- * http:// origin would be blocked as mixed content. Leave empty to disable the
- * remote demo entirely. */
-const DEMO_ORIGIN = '';
+/* Where the live instance currently lives. Kept in a separate JSON file rather
+ * than hardcoded here because a Cloudflare quick tunnel gets a fresh hostname
+ * every restart — scripts/serve-public.sh rewrites that one small file, so the
+ * page picks up a new address without touching any code. */
+const DEMO_CONFIG_URL = 'demo.json';
+
+async function loadDemoOrigin() {
+  try {
+    const res = await fetch(DEMO_CONFIG_URL, { cache: 'no-store' });
+    if (!res.ok) return '';
+    const { origin } = await res.json();
+    // Must be https: this page is served over TLS, so an http:// origin would
+    // be blocked as mixed content anyway.
+    return typeof origin === 'string' && origin.startsWith('https://') ? origin : '';
+  } catch {
+    return '';
+  }
+}
 
 /* Probed separately so anyone who already installed it gets sent to their own
  * copy. http://localhost counts as a trustworthy origin, though Safari has been
@@ -46,8 +59,9 @@ async function isUp(origin) {
 }
 
 async function initDemo() {
+  const demoOrigin = await loadDemoOrigin();
   const [remoteUp, localUp] = await Promise.all([
-    isUp(DEMO_ORIGIN),
+    isUp(demoOrigin),
     isUp(LOCAL_ORIGIN),
   ]);
 
