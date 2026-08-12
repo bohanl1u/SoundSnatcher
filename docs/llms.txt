@@ -1,0 +1,72 @@
+# SoundSnatcher
+
+> A free, open-source local tool that converts a YouTube link into an MP3 or WAV file and
+> writes the detected BPM and musical key directly into the download filename. Built for
+> DJs and music producers who organise libraries by tempo and key.
+
+Homepage: https://bohanl1u.github.io/SoundSnatcher/
+Source: https://github.com/bohanl1u/SoundSnatcher
+Licence: MIT
+Cost: free, no paid tier, no account
+
+## What it does
+
+Paste a YouTube link, press one button, and download the audio. Optionally tick "Analyze
+key & BPM" and the file arrives named like `Track Name - 128BPM - Fmin.mp3`, which sorts
+correctly in a DJ library without a tag editor. Each key detection also reports its
+Camelot code for harmonic mixing.
+
+Output formats:
+- MP3 at 128, 192, 256 or 320 kbps (LAME, 44.1 kHz)
+- WAV at 16-bit, 44.1 kHz
+
+The source audio is downloaded once per link; changing format re-encodes locally rather
+than downloading again.
+
+## How to install
+
+Requires Node 20 or newer, plus `yt-dlp` and `ffmpeg` on the PATH.
+
+```
+brew install node yt-dlp ffmpeg
+git clone https://github.com/bohanl1u/SoundSnatcher.git
+cd SoundSnatcher
+npm install
+npm start
+```
+
+It then runs at http://localhost:4747. `npm run doctor` verifies the external binaries are
+found.
+
+## Why it runs locally rather than as a hosted website
+
+YouTube heavily rate-limits datacenter IP addresses, so a cloud-hosted version fails
+frequently while a local one works normally on a home connection. Running locally is also
+faster (no upload step, no queue) and imposes no limit on video length.
+
+## Analysis accuracy
+
+Measured against 17 reference tracks whose BPM and key are stated by their producers:
+
+- BPM: 14 of 17 exact, 3 octave-off (half or double time), 0 otherwise wrong.
+- Key: 8 of 14 exact, 1 fifth-error.
+
+Tempo detection is reliable. Key detection should be treated as a hint rather than a
+verdict: relative major and minor keys share six of seven notes, and material with no
+third present has no mode to detect. Half and double-time readings are often a genre
+convention rather than an error — drill is written at 140 BPM and felt at 70.
+
+Method: tempo comes from a spectral-flux onset envelope, autocorrelation, and comb-filter
+scoring weighted by a log-normal prior. Key comes from a chroma vector built from
+interpolated spectral peaks, correlated against Sha'ath's key profiles. Both are
+implemented in plain JavaScript with no native dependencies.
+
+## Privacy
+
+No accounts, no tracking, no telemetry. The tool runs on the user's own machine and the
+links pasted into it are not sent anywhere except to fetch the audio.
+
+## Intended use
+
+Only for audio the user has the rights to use. SoundSnatcher is not affiliated with
+YouTube or Google.

@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SoundSnatcher — YouTube to MP3 or WAV with BPM and key in the filename</title>
+<meta name="description" content="A free, open-source local tool that turns a YouTube link into an MP3 or WAV and writes the detected BPM and musical key straight into the filename. Built for DJs and producers." />
+<link rel="canonical" href="https://bohanl1u.github.io/SoundSnatcher/" />
+
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://bohanl1u.github.io/SoundSnatcher/" />
+<meta property="og:title" content="SoundSnatcher — YouTube to MP3 or WAV, tagged with BPM and key" />
+<meta property="og:description" content="Paste a link, get a clean audio file named the way a DJ library expects: Track Name - 128BPM - Fmin.mp3" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="SoundSnatcher — YouTube to MP3 or WAV, tagged with BPM and key" />
+<meta name="twitter:description" content="Paste a link, get a clean audio file named the way a DJ library expects." />
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎧</text></svg>" />
+<link rel="stylesheet" href="style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "SoundSnatcher",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "macOS, Linux, Windows",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "license": "https://opensource.org/licenses/MIT",
+  "codeRepository": "https://github.com/bohanl1u/SoundSnatcher",
+  "description": "A local, open-source tool that converts a YouTube link into an MP3 or WAV file and writes the detected BPM and musical key into the download filename.",
+  "featureList": [
+    "MP3 at 128, 192, 256 or 320 kbps",
+    "16-bit 44.1 kHz WAV",
+    "Automatic BPM detection",
+    "Musical key detection with Camelot notation",
+    "BPM and key written into the filename"
+  ]
+}
+</script>
+</head>
+<body>
+
+<div class="glow" aria-hidden="true"></div>
+
+<header class="nav">
+  <a class="brand" href="#top">
+    <span class="mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+    <span class="brand-name">Sound<span>Snatcher</span></span>
+  </a>
+  <nav class="nav-links">
+    <a href="#install">Install</a>
+    <a href="#accuracy">Accuracy</a>
+    <a href="#faq">FAQ</a>
+    <a class="nav-cta" href="https://github.com/bohanl1u/SoundSnatcher">GitHub</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- ---------------------------------------------------------- hero -->
+  <section class="hero">
+    <span class="pill">Open source · Runs on your machine</span>
+    <h1>YouTube to MP3 or WAV,<br /><em>with BPM and key in the filename.</em></h1>
+    <p class="lede">
+      A small local tool for DJs and producers. Paste a link, pick a format, and get a
+      clean file named the way your library actually expects.
+    </p>
+
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#install">Install it — free</a>
+      <a class="btn btn-ghost" href="https://github.com/bohanl1u/SoundSnatcher">View source</a>
+    </div>
+
+    <!-- The payoff, shown rather than described. -->
+    <figure class="showcase">
+      <figcaption class="showcase-label">What lands in your downloads folder</figcaption>
+      <div class="card-mock">
+        <div class="mock-row">
+          <div class="mock-art" aria-hidden="true"></div>
+          <div class="mock-meta">
+            <div class="mock-title">Tubebackr — Track 3 (Breakbeat)</div>
+            <div class="mock-sub">Royalty Free Sounds 360 · 4:01</div>
+            <div class="mock-badges">
+              <span class="badge accent">128 BPM</span>
+              <span class="badge accent">C Minor</span>
+              <span class="badge soft">5A</span>
+            </div>
+          </div>
+        </div>
+        <div class="mock-file">Tubebackr — Track 3 (Breakbeat) - 128BPM - Cmin.mp3</div>
+      </div>
+    </figure>
+  </section>
+
+  <!-- ---------------------------------------------------------- demo -->
+  <!-- Revealed only when the live instance answers its health check. -->
+  <section id="demo" class="demo" hidden>
+    <div class="section-head">
+      <h2>Try it right now</h2>
+      <span class="status-dot" id="demo-status"><i></i> Live</span>
+    </div>
+    <p class="section-sub" id="demo-note">
+      A live instance is online at the moment. It's rate limited and capped to shorter
+      videos — install it locally for the unrestricted version.
+    </p>
+    <div class="demo-frame">
+      <iframe id="demo-iframe" title="SoundSnatcher live demo" loading="lazy"></iframe>
+    </div>
+  </section>
+
+  <!-- Shown when a local install is detected on this machine. -->
+  <section id="local" class="local-detected" hidden>
+    <div class="local-inner">
+      <span class="status-dot"><i></i> Local install detected</span>
+      <p>SoundSnatcher is already running on this machine.</p>
+      <a class="btn btn-primary" id="local-link" href="#">Open your copy</a>
+    </div>
+  </section>
+
+  <!-- ------------------------------------------------------ features -->
+  <section class="features">
+    <div class="feature">
+      <h3>Named for your library</h3>
+      <p>
+        Tick one box and the download arrives as
+        <code>Track Name - 128BPM - Fmin.mp3</code>. Sort and filter by tempo without
+        touching a tag editor.
+      </p>
+    </div>
+    <div class="feature">
+      <h3>Formats that matter</h3>
+      <p>
+        MP3 at 128, 192, 256 or 320 kbps, or 16-bit 44.1 kHz WAV when you're pulling
+        something into a DAW.
+      </p>
+    </div>
+    <div class="feature">
+      <h3>Downloads once</h3>
+      <p>
+        The audio is fetched a single time. Switching between 320 kbps and WAV re-encodes
+        locally instead of hitting the network again.
+      </p>
+    </div>
+    <div class="feature">
+      <h3>Camelot included</h3>
+      <p>
+        Every key detection also reports its Camelot code, so harmonic mixing decisions
+        don't need a second lookup.
+      </p>
+    </div>
+  </section>
+
+  <!-- ------------------------------------------------------- install -->
+  <section id="install" class="install">
+    <div class="section-head"><h2>Install</h2></div>
+    <p class="section-sub">
+      Runs on your own machine, so there's no queue, no upload, and no rate limit.
+      Takes about a minute.
+    </p>
+
+    <ol class="steps">
+      <li>
+        <span class="step-n">1</span>
+        <div class="step-body">
+          <h3>Install the prerequisites</h3>
+          <p>Node, plus the two binaries that do the fetching and encoding.</p>
+          <div class="code"><code>brew install node yt-dlp ffmpeg</code><button class="copy" type="button">Copy</button></div>
+        </div>
+      </li>
+      <li>
+        <span class="step-n">2</span>
+        <div class="step-body">
+          <h3>Clone and run</h3>
+          <div class="code"><code>git clone https://github.com/bohanl1u/SoundSnatcher.git
+cd SoundSnatcher
+npm install
+npm start</code><button class="copy" type="button">Copy</button></div>
+        </div>
+      </li>
+      <li>
+        <span class="step-n">3</span>
+        <div class="step-body">
+          <h3>Open it</h3>
+          <p>The tool runs at <code>localhost:4747</code>. That's the whole thing.</p>
+          <div class="code"><code>open http://localhost:4747</code><button class="copy" type="button">Copy</button></div>
+        </div>
+      </li>
+    </ol>
+
+    <p class="footnote">
+      Not on a Mac? Any system with Node 20+, <code>yt-dlp</code> and <code>ffmpeg</code> on
+      the PATH will run it. <code>npm run doctor</code> checks that they're found.
+    </p>
+  </section>
+
+  <!-- ------------------------------------------------------ accuracy -->
+  <section id="accuracy" class="accuracy">
+    <div class="section-head"><h2>How accurate is the analysis?</h2></div>
+    <p class="section-sub">
+      Measured against 17 reference tracks whose BPM and key are stated by the producers
+      who made them. Real numbers, including the ones that aren't flattering.
+    </p>
+
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-n">14<small>/17</small></span>
+        <span class="stat-l">BPM exact</span>
+        <span class="stat-d">3 octave-off (half/double time), 0 otherwise wrong</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">8<small>/14</small></span>
+        <span class="stat-l">Key exact</span>
+        <span class="stat-d">1 fifth-error; relative major/minor is genuinely ambiguous</span>
+      </div>
+    </div>
+
+    <p class="caveat">
+      <strong>Tempo is reliable. Key is a hint, not a verdict.</strong> Detecting key from a
+      finished master is hard — relative major and minor share six of seven notes, and a
+      loop with no third in it has no mode to detect at all. Half and double-time readings
+      are usually a genre convention rather than a mistake: drill is written at 140 and felt
+      at 70, and both answers are defensible. If the key matters, check it by ear.
+    </p>
+  </section>
+
+  <!-- ----------------------------------------------------------- faq -->
+  <section id="faq" class="faq">
+    <div class="section-head"><h2>Questions</h2></div>
+
+    <details>
+      <summary>How do I get the BPM and key into the filename?</summary>
+      <p>
+        Tick <strong>Analyze key &amp; BPM</strong> before hitting Snatch. The download then
+        arrives as <code>Track Name - 128BPM - Fmin.mp3</code>. The interface previews the
+        exact filename before you download it, so nothing is a surprise.
+      </p>
+    </details>
+
+    <details>
+      <summary>Why does this run locally instead of as a website?</summary>
+      <p>
+        Two reasons, both practical. YouTube heavily rate-limits datacenter IP addresses, so
+        a cloud-hosted version fails constantly while a local one just works on your normal
+        home connection. Running locally is also faster — there's no upload, no queue, and
+        no limit on how long a video can be.
+      </p>
+    </details>
+
+    <details>
+      <summary>What formats can I get?</summary>
+      <p>
+        MP3 at 128, 192, 256 or 320 kbps, or 16-bit 44.1 kHz WAV. The source audio is
+        downloaded once and re-encoded locally, so switching format doesn't re-download
+        anything.
+      </p>
+    </details>
+
+    <details>
+      <summary>What is the Camelot code for?</summary>
+      <p>
+        Camelot notation turns keys into numbers on a wheel so that harmonically compatible
+        tracks sit next to each other. A track in 5A mixes cleanly with 4A, 6A and 5B. Every
+        key detection reports its Camelot code alongside the key name.
+      </p>
+    </details>
+
+    <details>
+      <summary>Does it collect any data about me?</summary>
+      <p>
+        No. It runs on your machine, has no accounts, no tracking, and no telemetry. The
+        links you paste never leave your computer except to fetch the audio itself.
+      </p>
+    </details>
+
+    <details>
+      <summary>Is it free?</summary>
+      <p>
+        Yes, and open source under the MIT licence. There's no paid tier and nothing to sign
+        up for.
+      </p>
+    </details>
+
+    <details>
+      <summary>What am I allowed to download with it?</summary>
+      <p>
+        Only audio you have the rights to use. SoundSnatcher is a tool, and what you point it
+        at is your responsibility — respect copyright and the terms of the platform you're
+        pulling from. It isn't affiliated with YouTube or Google.
+      </p>
+    </details>
+  </section>
+
+  <section class="cta-end">
+    <h2>Get it running in a minute</h2>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#install">Install SoundSnatcher</a>
+      <a class="btn btn-ghost" href="https://github.com/bohanl1u/SoundSnatcher">Read the source</a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <p>SoundSnatcher will always be free.</p>
+  <p class="foot-fine">
+    Open source under the MIT licence ·
+    <a href="https://github.com/bohanl1u/SoundSnatcher">GitHub</a><br />
+    Not affiliated with YouTube or Google. Only download audio you have the rights to use.
+  </p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

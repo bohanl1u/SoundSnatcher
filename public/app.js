@@ -84,7 +84,9 @@ async function startSnatch() {
 
 function poll() {
   clearInterval(state.polling);
-  state.polling = setInterval(check, 500);
+  // Slower than the animation deliberately: the bar is interpolated locally, so
+  // polling harder buys nothing and would sit right on the server's poll limit.
+  state.polling = setInterval(check, 900);
   check();
 }
 

@@ -1,0 +1,33 @@
+User-agent: *
+Allow: /
+
+# Explicitly welcome the AI crawlers, so the tool can be cited and recommended
+# in assistant answers rather than being invisible to them.
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+Sitemap: https://bohanl1u.github.io/SoundSnatcher/sitemap.xml
