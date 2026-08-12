@@ -109,13 +109,13 @@
     </div>
   </section>
 
-  <!-- Shown when a copy is running on the visitor's own machine. Independent of
-       the demo above: both can appear at once. -->
-  <section id="local" class="local-detected" hidden>
+  <!-- A plain link, always present. Detecting a local copy would mean fetching a
+       loopback address from a public page, which makes browsers ask the visitor
+       to approve local network access — not a prompt worth showing anyone. -->
+  <section id="local" class="local-detected">
     <div class="local-inner">
-      <span class="status-dot"><i></i> Local install detected</span>
-      <p>SoundSnatcher is already running on this machine.</p>
-      <a class="btn btn-primary" id="local-link" href="#">Open your copy</a>
+      <p>Already running SoundSnatcher on this machine?</p>
+      <a class="btn btn-ghost" href="http://localhost:4747">Open your copy →</a>
     </div>
   </section>
 

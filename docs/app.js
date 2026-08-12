@@ -26,11 +26,6 @@ async function loadDemoOrigin() {
   }
 }
 
-/* Probed separately so anyone who already installed it gets sent to their own
- * copy. http://localhost counts as a trustworthy origin, though Safari has been
- * inconsistent about allowing it from an https page — treat it as a bonus. */
-const LOCAL_ORIGIN = 'http://localhost:4747';
-
 const PROBE_TIMEOUT_MS = 2500;
 
 // ----------------------------------------------------------------- probe
@@ -59,31 +54,23 @@ async function isUp(origin) {
 }
 
 /**
- * Two independent checks, two independent sections. Each appears only if its own
- * target answers, and neither suppresses the other — so a visitor running their
- * own copy still sees the live demo, with their local install offered directly
- * beneath it. When nothing answers, nothing renders.
+ * Reveals the demo if the shared instance answers.
+ *
+ * Nothing here ever touches localhost or any private address. A public page
+ * fetching a loopback address is what triggers Chrome's Local Network Access
+ * permission prompt, and a download tool asking to scan your local network is
+ * the last thing a first-time visitor should be asked to approve. The
+ * already-installed link below the demo is a plain anchor instead: a top-level
+ * navigation, not a subresource request, so no browser prompts for it.
  */
 async function initDemo() {
   const demoOrigin = await loadDemoOrigin();
-  const [remoteUp, localUp] = await Promise.all([
-    isUp(demoOrigin),
-    isUp(LOCAL_ORIGIN),
-  ]);
+  if (!(await isUp(demoOrigin))) return;
 
-  if (remoteUp) {
-    const section = document.getElementById('demo');
-    const frame = document.getElementById('demo-iframe');
-    if (frame) frame.src = demoOrigin;
-    if (section) section.hidden = false;
-  }
-
-  if (localUp) {
-    const section = document.getElementById('local');
-    const link = document.getElementById('local-link');
-    if (link) link.href = LOCAL_ORIGIN;
-    if (section) section.hidden = false;
-  }
+  const section = document.getElementById('demo');
+  const frame = document.getElementById('demo-iframe');
+  if (frame) frame.src = demoOrigin;
+  if (section) section.hidden = false;
 }
 
 // -------------------------------------------------------------- niceties
