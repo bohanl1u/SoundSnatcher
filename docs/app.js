@@ -78,7 +78,7 @@ async function initDemo() {
   if (remoteUp) {
     const section = document.getElementById('demo');
     const frame = document.getElementById('demo-iframe');
-    if (frame) frame.src = DEMO_ORIGIN;
+    if (frame) frame.src = demoOrigin;
     if (section) section.hidden = false;
   }
 }
@@ -153,4 +153,8 @@ function initNav() {
 initNav();
 initCopy();
 initReveal();
-initDemo();
+
+// A throw inside initDemo would otherwise vanish into an unhandled rejection and
+// look identical to "the demo is offline" — which is exactly how a stale
+// reference in here once went unnoticed.
+initDemo().catch((err) => console.error('[soundsnatcher] demo probe failed:', err));
